@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract NFTMarketplace is ERC721Enumerable, Ownable {
     uint256 mintNFTNumber;
 
-    // 挖的數量
+    // 挖的數量 test git
     uint256 public supplyNFT = 100;
 
     //價錢範圍
