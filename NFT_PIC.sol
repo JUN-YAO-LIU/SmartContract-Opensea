@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
@@ -9,13 +9,13 @@ contract NFTMarketplace is ERC721Enumerable, Ownable {
     uint256 mintNFTNumber;
 
     // 挖的數量 test git master -> develop
-    uint256 public supplyNFT = 100;
+    uint256 public supplyNFT1 = 100;
 
     //價錢範圍
     uint256 public nftPrice = 0.0001 ether;
 
     // 圖片網址
-    string public baseUri;
+    string public baseUri = "https://testNFT.com/";
 
     // 檔案附檔名
     string public extensionFileName = ".json";
@@ -38,7 +38,7 @@ contract NFTMarketplace is ERC721Enumerable, Ownable {
 
         // 目前已挖出數量，如果這次再挖會不會超過
         uint256 mintIndex = getCurrentNFTIndex();
-        require(mintIndex + 1 <= supplyNFT, "Sale would exceed max supply");
+        require(mintIndex + 1 <= supplyNFT1, "Sale would exceed max supply");
 
         // 是否傳入足夠的錢
         require(1 * nftPrice <= msg.value, "Not enough ether sent");
@@ -48,7 +48,24 @@ contract NFTMarketplace is ERC721Enumerable, Ownable {
 
     function transfer() public {}
 
-    function getNFTList() public {}
+    function getNFTList() public view returns (string[] memory) {
+        uint256 nftIndex = getCurrentNFTIndex();
+        string[] memory urlArr = new string[](nftIndex);
+        string memory base = _baseURI();
+
+        for (uint256 i = 0; i < nftIndex; i++) {
+            urlArr[i] = 
+                string(
+                    abi.encodePacked(
+                        base,
+                        Strings.toString(i),
+                        extensionFileName
+                    )
+                );
+        }
+
+        return urlArr;
+    }
 
     function tokenURI(uint256 tokenId)
         public
