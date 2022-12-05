@@ -5,9 +5,13 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "PIC_Modifier.sol";
+import "ExternalTest.sol";
 
 contract NFTMarketplace is ERC721Enumerable, Ownable, PIC_Modifier {
     uint256 mintNFTNumber;
+
+    //Declare an Event
+    event mintNFTEvent(address indexed _to, uint256 indexed _value);
 
     // 挖的數量 test git master -> develop
     uint256 public supplyNFT1;
@@ -26,8 +30,13 @@ contract NFTMarketplace is ERC721Enumerable, Ownable, PIC_Modifier {
 
     bool public enabled;
 
+    // 如果存入錯誤的長度會不會有問題
+    address memberAddress;
+
     // _tokenURIS[key] = "value"
     mapping(uint256 => string) private _tokenURIs;
+
+    ExternalTest private obj;
 
     constructor() ERC721("Picture", "PIC") {
         supplyNFT1 = 100;
@@ -36,9 +45,11 @@ contract NFTMarketplace is ERC721Enumerable, Ownable, PIC_Modifier {
         extensionFileName = ".json";
         mintLimit = 2;
         enabled = true;
+
+        obj = new ExternalTest();
     }
 
-    function mintNFT() public mintNFTModifier payable {
+    function mintNFT() public payable mintNFTModifier {
         // 開關
         if (!enabled) {
             require(true, "this nft already closed.");
@@ -54,7 +65,9 @@ contract NFTMarketplace is ERC721Enumerable, Ownable, PIC_Modifier {
         _safeMint(msg.sender, mintIndex);
     }
 
-    function transferNFT() public {}
+    function testEvent() public {
+        emit mintNFTEvent(msg.sender, mintLimit);
+    }
 
     function getNFTList() public view returns (string[] memory) {
         uint256 nftIndex = getCurrentNFTIndex();
@@ -116,6 +129,33 @@ contract NFTMarketplace is ERC721Enumerable, Ownable, PIC_Modifier {
 
     // internal
     function _baseURI() internal view virtual override returns (string memory) {
+        internalModifierTest();
         return baseUri;
+    }
+
+    function Aexternal() external view returns (uint8) {
+        uint8 test = obj.externalModifierTest();
+        return test;
+    }
+
+    function Bexternal() public view returns (uint8) {
+        uint8 test = obj.externalModifierTest();
+        return test + 1;
+    }
+
+     function getThisContractAddress() public view returns (address) {
+        return address(this);
+    }
+
+    // pure只做運算，不用memroy的值
+    function privateTest() private pure returns (uint8) {
+        return 1;
+    }
+
+    // modified
+    modifier mintNFTModifier1() {
+        // function前
+        _;
+        // function後
     }
 }
