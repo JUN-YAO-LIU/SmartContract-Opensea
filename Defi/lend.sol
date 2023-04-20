@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.18;
 
-contract Lend{
+// 繼承寫法注意
+import "basicFinance";
+
+contract Lend is basicFinance{
 
     // 狀態
     // 放貸多久，通常時間單位？天？ 閏月問題？計算今天幾月幾號？
@@ -20,6 +23,10 @@ contract Lend{
     int8 public lendRate;
 
     // 方法
+    // 匯入eth
+    // 提現eth
+    // 匯入usdt
+    // 提線usdt
     // 申請放貸
     // 拿回金額
     // 查詢放貸金額
