@@ -13,4 +13,5 @@ contract ReceiveETH{
         return address(this).balance;
     }
 
+    receive() external payable {}
 }
