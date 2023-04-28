@@ -68,7 +68,6 @@ contract MultiSignWallet{
         required = _required;
     }
 
-
     receive() external payable{
         emit Deposit(msg.sender,msg.value);
     }
