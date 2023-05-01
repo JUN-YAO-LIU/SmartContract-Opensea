@@ -7,5 +7,8 @@ contract defaultTest{
     uint public u;
     int public i;
     address public a;
+
+    // 1 byte = 8 bits  => 0000 0000 two sets.
     bytes32 public b32;
+    string public s = "sf";
 }
